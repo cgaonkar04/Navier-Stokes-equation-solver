@@ -84,8 +84,7 @@ def main():
         laplace__u_prev = laplace(u_prev)
         laplace__v_prev = laplace(v_prev)
 
-        # Perform a tentative step by solving the momentum equation without the
-        # pressure gradient
+        # Perform a tentative step by solving the momentum equation without the pressure gradient
         u_tent = (
             u_prev
             +
@@ -115,8 +114,7 @@ def main():
             )
         )
 
-        # Velocity Boundary Conditions: Homogeneous Dirichlet BC everywhere
-        # except for the horizontal velocity at the top, which is prescribed
+        # Velocity Boundary Conditions: Homogeneous Dirichlet BC everywhere except for the horizontal velocity at the top.
         u_tent[0, :] = 0.0
         u_tent[:, 0] = 0.0
         u_tent[:, -1] = 0.0
@@ -159,8 +157,7 @@ def main():
             )
 
             # Pressure Boundary Conditions: Homogeneous Neumann Boundary
-            # Conditions everywhere except for the top, where it is a
-            # homogeneous Dirichlet BC
+            
             p_next[:, -1] = p_next[:, -2]
             p_next[0,  :] = p_next[1,  :]
             p_next[:,  0] = p_next[:,  1]
@@ -172,7 +169,7 @@ def main():
         d_p_next__d_x = central_difference_x(p_next)
         d_p_next__d_y = central_difference_y(p_next)
 
-        # Correct the velocities such that the fluid stays incompressible
+        # Correct the velocities so that the fluid stays incompressible
         u_next = (
             u_tent
             -
@@ -188,8 +185,7 @@ def main():
             d_p_next__d_y
         )
 
-        # Velocity Boundary Conditions: Homogeneous Dirichlet BC everywhere
-        # except for the horizontal velocity at the top, which is prescribed
+        # Velocity Boundary Conditions: Homogeneous Dirichlet BC everywhere except for the horizontal velocity at the top
         u_next[0, :] = 0.0
         u_next[:, 0] = 0.0
         u_next[:, -1] = 0.0

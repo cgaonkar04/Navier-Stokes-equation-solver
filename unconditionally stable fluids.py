@@ -54,8 +54,6 @@ def main():
     x = np.linspace(0.0, DOMAIN_SIZE, N_POINTS)
     y = np.linspace(0.0, DOMAIN_SIZE, N_POINTS)
 
-    # Using "ij" indexing makes the differential operators more logical. Take
-    # care when plotting.
     X, Y = np.meshgrid(x, y, indexing="ij")
 
     coordinates = np.concatenate(
@@ -217,13 +215,13 @@ def main():
             forces
         )
 
-        # (2) Nonlinear convection (=self-advection)
+        #  Nonlinear convection 
         velocities_advected = advect(
             field=velocities_forces_applied,
             vector_field=velocities_forces_applied,
         )
 
-        # (3) Diffuse
+        #  Diffusion
         velocities_diffused = splinalg.cg(
             A=splinalg.LinearOperator(
                 shape=(vector_dof, vector_dof),
@@ -233,7 +231,7 @@ def main():
             maxiter=MAX_ITER_CG,
         )[0].reshape(vector_shape)
 
-        # (4.1) Compute a pressure correction
+        #  Compute a pressure correction
         pressure = splinalg.cg(
             A=splinalg.LinearOperator(
                 shape=(scalar_dof, scalar_dof),
@@ -243,7 +241,7 @@ def main():
             maxiter=MAX_ITER_CG,
         )[0].reshape(scalar_shape)
 
-        # (4.2) Correct the velocities to be incompressible
+        #  Correct the velocities to be incompressible
         velocities_projected = (
             velocities_diffused
             -
